@@ -279,5 +279,5 @@ cython_debug/
 output/
 .checkpoints
 
-video_glitch/
-libs/
+output.txt
+result.txt
