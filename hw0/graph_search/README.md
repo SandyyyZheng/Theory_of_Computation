@@ -1,8 +1,7 @@
 # Graph Search
 
 ## Problem Description
-Indicate the order in which nodes are visited in breadth-first and depth-first searches of undirected graphs. Graphs will be given in text format as an adjacency
-list, with nodes represented by letters. For example,
+Indicate the order in which nodes are visited in breadth-first and depth-first searches of undirected graphs. Graphs will be given in text format as an adjacency list, with nodes represented by letters. For example,
 
 ```
 a: b, c, d
