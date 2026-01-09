@@ -1,0 +1,66 @@
+# NFA for: { x | (x[|x|-5] = 0 AND x[|x|-2] = 0) OR x[|x|] = 1 }
+
+# States:
+# q_start     : Initial state, loops until it guesses the pattern starts
+# q_found_n5  : Just read the -5th element (must be 0)
+# q_gap_n4    : Just read the -4th element
+# q_gap_n3    : Just read the -3rd element
+# q_found_n2  : Just read the -2nd element (must be 0)
+# q_gap_n1    : Just read the -1st element (penultimate)
+# q_accept    : Accepted state (either last was 1 OR pattern matched)
+
+states:
+  - q_start
+  - q_found_n5
+  - q_gap_n4
+  - q_gap_n3
+  - q_found_n2
+  - q_gap_n1
+  - q_accept
+
+input_alphabet: [0, 1]
+
+start_state: q_start
+
+accept_states: [q_accept]
+
+delta:
+  q_start:
+    # Logic:
+    # 1. Loop on self to consume prefix
+    # 2. If see 0, guess it is the -5th element (branch A)
+    # 3. If see 1, guess it is the last element (branch B)
+    0: [q_start, q_found_n5]
+    1: [q_start, q_accept]
+
+  # Branch A: Sequence check for 0 _ _ 0 _ _
+  
+  # Step 1: Just matched x[|x|-5] = 0
+  # Consume x[|x|-4]
+  q_found_n5:
+    0: q_gap_n4
+    1: q_gap_n4
+
+  # Step 2: Just consumed x[|x|-4]
+  # Consume x[|x|-3]
+  q_gap_n4:
+    0: q_gap_n3
+    1: q_gap_n3
+
+  # Step 3: Just consumed x[|x|-3]
+  # Check x[|x|-2] (must be 0 or reject)
+  q_gap_n3:
+    0: q_found_n2
+    # If 1, rejects.
+
+  # Step 4: Just matched x[|x|-2] = 0
+  # Consume x[|x|-1]
+  q_found_n2:
+    0: q_gap_n1
+    1: q_gap_n1
+
+  # Step 5: Just consumed x[|x|-1]
+  # Consume x[|x|] (the last char, value doesn't matter for this branch)
+  q_gap_n1:
+    0: q_accept
+    1: q_accept
